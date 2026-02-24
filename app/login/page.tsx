@@ -20,7 +20,6 @@ export default function LoginPage() {
     try {
       const data = await login({ email, password });
       localStorage.setItem('token', data.accessToken);
-      window.location.reload();
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');
@@ -32,7 +31,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#f5f0e8] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-10">
           <p className="text-xs uppercase tracking-widest text-stone-400 mb-2">Welcome back</p>
           <h1 className="font-['Playfair_Display'] text-5xl font-black text-[#1a1a1a]">Sign In</h1>
