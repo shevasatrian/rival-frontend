@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RivalBlog — Frontend
 
-## Getting Started
+Frontend for RivalBlog, a fullstack blog platform. Built with Next.js 15 App Router and Tailwind CSS.
 
-First, run the development server:
+---
+
+## 🔗 Links
+
+| | URL |
+|---|---|
+| **Live App** | `https://rival-frontend.vercel.app/dashboard` |
+| **Backend Repository** | `https://github.com/shevasatrian/rival-backend` |
+
+---
+
+## 🛠️ Tech Stack
+
+- **Next.js 15** — App Router, Server & Client Components
+- **TypeScript**
+- **Tailwind CSS**
+- **Axios** — HTTP client with JWT interceptor
+
+---
+
+## 🚀 Setup Instructions
+
+### Prerequisites
+
+- Node.js >= 18
+- Backend API running (see backend repository)
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Clone repository
+git clone https://github.com/yourusername/rivalblog-frontend.git
+cd rivalblog-frontend
+
+# 2. Install dependencies
+npm install
+
+# 3. Copy environment file
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Fill in `.env`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 4. Start development server
+npm run dev
+```
 
-## Learn More
+App will run on `http://localhost:3000`.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/
+│   ├── page.tsx                  # Home (redirects to feed)
+│   ├── layout.tsx                # Root layout with Navbar
+│   ├── feed/
+│   │   └── page.tsx              # Public blog feed with pagination
+│   ├── blog/
+│   │   └── [slug]/
+│   │       └── page.tsx          # Blog detail page
+│   ├── login/
+│   │   └── page.tsx              # Login page
+│   ├── register/
+│   │   └── page.tsx              # Register page
+│   └── dashboard/
+│       ├── layout.tsx            # Dashboard layout (auth guard)
+│       ├── page.tsx              # My blogs list
+│       ├── create/
+│       │   └── page.tsx          # Create blog
+│       └── edit/
+│           └── [id]/
+│               └── page.tsx      # Edit blog
+├── components/
+│   ├── Navbar.tsx
+│   └── blog/
+│       ├── LikeButton.tsx        # Toggle like/unlike
+│       └── CommentSection.tsx    # Comments list & form
+└── lib/
+    ├── api.ts                    # Axios instance with JWT interceptor
+    └── auth.ts                   # Login & register helpers
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🏗️ Architecture Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Server vs Client Components**
+
+Pages that only display data (`feed`, `blog/[slug]`) are Server Components — they fetch data on the server for better performance and SEO. Interactive components (`LikeButton`, `CommentSection`, forms) are Client Components since they require state and user interaction.
+
+**Authentication**
+
+JWT is stored in `localStorage` and attached to every API request via an Axios interceptor in `lib/api.ts`. The dashboard layout checks for token presence on mount and redirects to `/login` if absent.
+
+**Optimistic UI**
+
+`LikeButton` uses optimistic updates — the count updates immediately on click and rolls back if the API request fails, making interactions feel instant.
+
+---
