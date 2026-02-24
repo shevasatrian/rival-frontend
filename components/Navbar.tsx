@@ -3,16 +3,17 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuth(!!token);
-  }, []);
+  }, [pathname]);
 
   function logout() {
     localStorage.removeItem('token');
